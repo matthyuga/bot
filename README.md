@@ -7,7 +7,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import urllib.request
 import json
-DISCORD_TOKEN = 'ODk5ODAyNzAzMzY1MDIxNzY2.YW4Ekg.AdNnNYVrnzmixFPiO2Ez8SBou-A'
+DISCORD_TOKEN = '#aca va el token'
 #esto es del servidor del discord con el token
 
 #_______________________________________________________________________PREFIJO
