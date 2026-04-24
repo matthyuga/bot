@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template, request
+
+from orchestrator import handle_turn
 
 app = Flask(__name__)
 
@@ -11,6 +13,14 @@ def home():
 @app.get("/health")
 def health():
     return {"ok": True, "service": "assistant-mvp"}
+
+
+@app.post("/chat")
+def chat():
+    payload = request.get_json(silent=True) or {}
+    user_input = str(payload.get("message", "")).strip()
+    result = handle_turn(user_input)
+    return jsonify(result)
 
 
 if __name__ == "__main__":

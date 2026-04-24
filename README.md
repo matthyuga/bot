@@ -1,24 +1,25 @@
-# Asistente IA MVP (Fase 1)
+# Asistente IA MVP (Fase 2)
 
-Este repositorio contiene la base del asistente IA y ahora incluye la **Fase 1 completa**: persistencia SQLite + tools funcionales con validación.
+El proyecto ahora incluye la **Fase 2**: detección de intención + orquestación + ejecución de tools + logging en base de datos.
 
 ## Qué incluye actualmente
 - Base web mínima:
-  - `app.py` (`/` y `/health`)
+  - `app.py` (`/`, `/health`, `/chat`)
   - `templates/index.html`
 - Persistencia:
-  - `db.py` (conexión, inicialización y helpers)
+  - `db.py` (conexión, init y helpers)
   - `db/schema.sql` (tablas `clientes`, `historial`, `eventos_chat`)
-- Herramientas de dominio:
+- Herramientas funcionales:
   - `crear_cliente`
   - `listar_clientes`
   - `registrar_historial`
   - `ver_historial`
-- Módulos de IA inicial:
-  - `intents.py`
-  - `orchestrator.py`
+- IA (reglas):
+  - `intents.py` (clasificador de intención por keywords)
+  - `orchestrator.py` (router intención->tool + respuesta)
 - Tests:
   - `tests/test_tools.py`
+  - `tests/test_orchestrator.py`
   - `tests/test_smoke.py` (se omite si Flask no está disponible)
 
 ## Requisitos
@@ -36,9 +37,13 @@ pip install -r requirements.txt
 ./run.sh
 ```
 
-Abrir en navegador:
-- `http://localhost:5000/`
-- `http://localhost:5000/health`
+## Probar endpoints
+```bash
+curl -s http://localhost:5000/health
+curl -s -X POST http://localhost:5000/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"ayuda"}'
+```
 
 ## Ejecutar pruebas
 ```bash
@@ -46,4 +51,4 @@ pytest -q
 ```
 
 ## Próximo paso
-Fase 2: intención + orquestador conectados a tools para endpoint de chat (`/chat`).
+Fase 3: mejorar UX del chat, métricas y evaluación con dataset de prompts.
