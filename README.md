@@ -1,22 +1,26 @@
-# Asistente IA MVP (Fase 3)
+# Asistente IA MVP (Fase 4)
 
-El proyecto ahora incluye la **Fase 3**: UX básica de chat + métricas operativas + evaluación con dataset de prompts.
+El proyecto ahora incluye la **Fase 4**: hardening operativo, manejo robusto de errores, logging y runbook/demo reproducible.
 
 ## Qué incluye actualmente
 - Base web:
-  - `app.py` (`/`, `/health`, `/chat`, `/metrics`)
-  - `templates/index.html` (UI de chat para probar intención/tool/latencia)
+  - `app.py` (`/`, `/health`, `/chat`, `/metrics`) con manejo de errores HTTP.
+  - `templates/index.html` para pruebas manuales.
 - Persistencia:
   - `db.py`
   - `db/schema.sql`
 - Herramientas funcionales:
   - `crear_cliente`, `listar_clientes`, `registrar_historial`, `ver_historial`
 - IA (reglas):
-  - `intents.py` (clasificador por keywords)
-  - `orchestrator.py` (router intención->tool + logging)
-- Evaluación Fase 3:
-  - `data/prompts_eval.jsonl` (dataset de prompts con intención esperada)
-  - `scripts/evaluar_fase3.py` (accuracy intención, éxito de tools, latencia)
+  - `intents.py`
+  - `orchestrator.py` (routing + `error_code` + logging de excepciones)
+- Evaluación:
+  - `data/prompts_eval.jsonl`
+  - `scripts/evaluar_fase3.py`
+- Operación Fase 4:
+  - `scripts/init_db.py`
+  - `scripts/demo_fase4.sh`
+  - `docs/OPERACION_FASE4.md`
 - Tests:
   - `tests/test_tools.py`
   - `tests/test_orchestrator.py`
@@ -33,21 +37,15 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Ejecutar app
+## Runbook rápido
 ```bash
+python3 scripts/init_db.py
 ./run.sh
+# en otra terminal:
+./scripts/demo_fase4.sh
 ```
 
-## Probar endpoints
-```bash
-curl -s http://localhost:5000/health
-curl -s -X POST http://localhost:5000/chat \
-  -H 'Content-Type: application/json' \
-  -d '{"message":"crear cliente Ana"}'
-curl -s http://localhost:5000/metrics
-```
-
-## Evaluar Fase 3
+## Evaluación automática
 ```bash
 python3 scripts/evaluar_fase3.py
 ```
@@ -58,4 +56,4 @@ pytest -q
 ```
 
 ## Próximo paso
-Fase 4: endurecimiento (errores, observabilidad, documentación de operación y demo estable).
+Fase 5: integración de voz (STT/TTS) y opcional modulación MMVC/RVC.
