@@ -5,6 +5,7 @@ from flask import Flask, jsonify, render_template, request
 
 from db import DB_PATH, fetch_all, init_db
 from orchestrator import handle_turn
+from voice_pipeline import VoiceConfig, VoicePipeline
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,6 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+voice_pipeline = VoicePipeline()
 
 
 @app.get("/")
@@ -48,6 +50,56 @@ def chat():
 
     elapsed_ms = round((time.perf_counter() - started) * 1000, 2)
     return jsonify({**result, "elapsed_ms": elapsed_ms}), status
+
+
+@app.post("/voice/chat")
+def voice_chat():
+    """Fase 5: respuesta de asistente + síntesis TTS + hook opcional de modulación."""
+    payload = request.get_json(silent=True) or {}
+    user_input = str(payload.get("message", "")).strip()
+    tts_style = str(payload.get("tts_style", "neutral")).strip() or "neutral"
+    voice_character = str(payload.get("voice_character", "default")).strip() or "default"
+    enable_modulation = bool(payload.get("enable_modulation", False))
+
+    started = time.perf_counter()
+
+    try:
+        turn = handle_turn(user_input)
+        cfg = VoiceConfig(
+            tts_style=tts_style,
+            voice_character=voice_character,
+            enable_modulation=enable_modulation,
+        )
+        voice = voice_pipeline.run_text(turn["response"], cfg)
+
+        elapsed_ms = round((time.perf_counter() - started) * 1000, 2)
+
+        status = 200 if turn.get("ok", False) else 400
+        return (
+            jsonify(
+                {
+                    "ok": turn["ok"],
+                    "intent": turn["intent"],
+                    "response": turn["response"],
+                    "error_code": turn.get("error_code"),
+                    "voice": voice,
+                    "elapsed_ms": elapsed_ms,
+                }
+            ),
+            status,
+        )
+    except Exception:
+        logger.exception("Error en /voice/chat")
+        return (
+            jsonify(
+                {
+                    "ok": False,
+                    "error_code": "VOICE_PIPELINE_ERROR",
+                    "response": "No se pudo generar la salida de voz.",
+                }
+            ),
+            500,
+        )
 
 
 @app.get("/metrics")
