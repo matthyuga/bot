@@ -1,5 +1,8 @@
+import time
+
 from flask import Flask, jsonify, render_template, request
 
+from db import DB_PATH, fetch_all, init_db
 from orchestrator import handle_turn
 
 app = Flask(__name__)
@@ -19,8 +22,37 @@ def health():
 def chat():
     payload = request.get_json(silent=True) or {}
     user_input = str(payload.get("message", "")).strip()
+
+    started = time.perf_counter()
     result = handle_turn(user_input)
-    return jsonify(result)
+    elapsed_ms = round((time.perf_counter() - started) * 1000, 2)
+
+    return jsonify({**result, "elapsed_ms": elapsed_ms})
+
+
+@app.get("/metrics")
+def metrics():
+    init_db(DB_PATH)
+
+    total_rows = fetch_all("SELECT COUNT(*) AS total FROM eventos_chat", db_path=DB_PATH)[0]["total"]
+    ok_rows = fetch_all("SELECT COUNT(*) AS ok_count FROM eventos_chat WHERE ok = 1", db_path=DB_PATH)[0][
+        "ok_count"
+    ]
+    by_intent = [
+        dict(row)
+        for row in fetch_all(
+            "SELECT intent, COUNT(*) AS count FROM eventos_chat GROUP BY intent ORDER BY count DESC",
+            db_path=DB_PATH,
+        )
+    ]
+
+    return {
+        "ok": True,
+        "total_turnos": total_rows,
+        "turnos_exitosos": ok_rows,
+        "tasa_exito": round((ok_rows / total_rows) * 100, 2) if total_rows else 0.0,
+        "por_intent": by_intent,
+    }
 
 
 if __name__ == "__main__":

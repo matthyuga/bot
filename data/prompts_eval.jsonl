@@ -1,0 +1,40 @@
+{"message":"hola","expected_intent":"saludo"}
+{"message":"buenas","expected_intent":"saludo"}
+{"message":"saludos","expected_intent":"saludo"}
+{"message":"ayuda","expected_intent":"ayuda"}
+{"message":"comandos","expected_intent":"ayuda"}
+{"message":"que puedes hacer","expected_intent":"ayuda"}
+{"message":"crear cliente ana","expected_intent":"crear_cliente"}
+{"message":"crear cliente luis","expected_intent":"crear_cliente"}
+{"message":"registrar cliente sofia","expected_intent":"crear_cliente"}
+{"message":"nuevo cliente mario","expected_intent":"crear_cliente"}
+{"message":"listar clientes","expected_intent":"listar_clientes"}
+{"message":"listar clientes 5","expected_intent":"listar_clientes"}
+{"message":"ver clientes 3","expected_intent":"listar_clientes"}
+{"message":"mostrar clientes 2","expected_intent":"listar_clientes"}
+{"message":"registrar historial 1 2 3","expected_intent":"registrar_historial"}
+{"message":"registrar historial 2 4 6","expected_intent":"registrar_historial"}
+{"message":"registrar historial 3 3 9","expected_intent":"registrar_historial"}
+{"message":"guardar operacion 10 5 15","expected_intent":"registrar_historial"}
+{"message":"guardar operación 7 8 56","expected_intent":"registrar_historial"}
+{"message":"ver historial","expected_intent":"ver_historial"}
+{"message":"ver historial 5","expected_intent":"ver_historial"}
+{"message":"mostrar historial 3","expected_intent":"ver_historial"}
+{"message":"listar historial 10","expected_intent":"ver_historial"}
+{"message":"crear cliente carla","expected_intent":"crear_cliente"}
+{"message":"crear cliente juan","expected_intent":"crear_cliente"}
+{"message":"registrar cliente pedro","expected_intent":"crear_cliente"}
+{"message":"nuevo cliente lucia","expected_intent":"crear_cliente"}
+{"message":"listar clientes 1","expected_intent":"listar_clientes"}
+{"message":"listar clientes 8","expected_intent":"listar_clientes"}
+{"message":"ver clientes 7","expected_intent":"listar_clientes"}
+{"message":"mostrar clientes 10","expected_intent":"listar_clientes"}
+{"message":"registrar historial 9 9 18","expected_intent":"registrar_historial"}
+{"message":"registrar historial 4 1 5","expected_intent":"registrar_historial"}
+{"message":"guardar operacion 6 2 8","expected_intent":"registrar_historial"}
+{"message":"guardar operación 1 1 2","expected_intent":"registrar_historial"}
+{"message":"ver historial 1","expected_intent":"ver_historial"}
+{"message":"mostrar historial 7","expected_intent":"ver_historial"}
+{"message":"listar historial 2","expected_intent":"ver_historial"}
+{"message":"hola bot","expected_intent":"saludo"}
+{"message":"hey","expected_intent":"saludo"}
