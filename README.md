@@ -1,41 +1,43 @@
-# bot
-bot de discord
-#_______________________________________________________________________INICIO DEL BOT
-import os
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
-import urllib.request
-import json
-DISCORD_TOKEN = '#aca va el token'
-#esto es del servidor del discord con el token
+# Asistente IA MVP (Fase 0)
 
-#_______________________________________________________________________PREFIJO
-bot = commands.Bot(command_prefix='!')
-#_______________________________________________________________________
+Este repositorio quedó preparado con la **estructura base de arranque** para el proyecto del asistente IA.
 
-  
+## Qué incluye Fase 0
+- Estructura inicial de módulos:
+  - `app.py`
+  - `db.py`
+  - `tools.py`
+  - `intents.py`
+  - `orchestrator.py`
+  - `templates/index.html`
+  - `tests/test_smoke.py`
+- Dependencias mínimas en `requirements.txt`.
+- Script de arranque `run.sh`.
+- Normas de trabajo en `NORMAS_EQUIPO.md`.
 
-#es del bot de dados
-#__________________________________________________________________________
+## Requisitos
+- Python 3.10+
 
-#______________________________________________________________________IMPORTAR RANDON
+## Instalación rápida
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-import random
-for i in range (1):
-#______________________________________________________________________
+## Ejecutar
+```bash
+./run.sh
+```
 
-#_____________________________________________________________________IMAGENES
-    imagen1 = 'https://media.discordapp.net/attachments/807091135608258560/900836975999848498/exito.png'
-    imagen2 = 'https://cdn.discordapp.com/attachments/807091135608258560/900836977295917126/fracaso.png'
+Abrir en navegador:
+- `http://localhost:5000/`
+- `http://localhost:5000/health`
 
-#__________________________________________________________________________EXP DE BOT DISCORD
-    @bot.command(name='dadoexito')
-    async def tirar(ctx):
-     operador1 = random.choice([imagen1 ,imagen2])
-     await ctx.send('la tirada salio')
-     await ctx.send(operador1)
-        
+## Ejecutar pruebas
+```bash
+pytest -q
+```
 
-#__________________________________________________________________________ENCENDIDO
-bot.run(DISCORD_TOKEN) 
+## Próximo paso
+Implementar Fase 1: esquema SQL + tools reales con validación y persistencia.
