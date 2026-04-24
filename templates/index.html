@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asistente IA MVP - Fase 3</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 24px; max-width: 900px; }
+      .row { display: flex; gap: 8px; margin-bottom: 12px; }
+      input { flex: 1; padding: 10px; }
+      button { padding: 10px 14px; }
+      .panel { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-top: 12px; }
+      .meta { color: #555; font-size: 0.9rem; }
+      .ok { color: #0a7a31; }
+      .err { color: #b42318; }
+      code { background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }
+      pre { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Asistente IA MVP (Fase 3)</h1>
+    <p>Chat de prueba para evaluar intención, tool usada, estado y latencia por turno.</p>
+
+    <div class="row">
+      <input id="message" placeholder="Ej: crear cliente Ana" />
+      <button id="send">Enviar</button>
+      <button id="metrics">Ver métricas</button>
+    </div>
+
+    <div class="panel">
+      <strong>Comandos sugeridos:</strong>
+      <ul>
+        <li><code>ayuda</code></li>
+        <li><code>crear cliente Ana</code></li>
+        <li><code>listar clientes 5</code></li>
+        <li><code>registrar historial 1 2 3</code></li>
+        <li><code>ver historial 5</code></li>
+        <li><code>POST /voice/chat</code> con JSON de voz (ver README)</li>
+      </ul>
+    </div>
+
+    <div id="result" class="panel" hidden>
+      <div id="response"></div>
+      <div id="meta" class="meta"></div>
+      <pre id="toolResult"></pre>
+    </div>
+
+    <script>
+      const messageInput = document.getElementById('message');
+      const sendBtn = document.getElementById('send');
+      const metricsBtn = document.getElementById('metrics');
+
+      async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        const result = document.getElementById('result');
+        const response = document.getElementById('response');
+        const meta = document.getElementById('meta');
+        const toolResult = document.getElementById('toolResult');
+
+        response.innerHTML = `<strong>Respuesta:</strong> ${data.response}`;
+        meta.className = `meta ${data.ok ? 'ok' : 'err'}`;
+        meta.textContent = `ok=${data.ok} | intent=${data.intent} | tool=${data.tool || '-'} | latencia=${data.elapsed_ms}ms`;
+        toolResult.textContent = JSON.stringify(data.tool_result || {}, null, 2);
+        result.hidden = false;
+      }
+
+      async function loadMetrics() {
+        const res = await fetch('/metrics');
+        const data = await res.json();
+        const result = document.getElementById('result');
+        const response = document.getElementById('response');
+        const meta = document.getElementById('meta');
+        const toolResult = document.getElementById('toolResult');
+
+        response.innerHTML = `<strong>Métricas:</strong> ${data.total_turnos} turnos, tasa de éxito ${data.tasa_exito}%`;
+        meta.className = 'meta';
+        meta.textContent = 'Distribución por intención en tool_result';
+        toolResult.textContent = JSON.stringify(data.por_intent, null, 2);
+        result.hidden = false;
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      messageInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+      metricsBtn.addEventListener('click', loadMetrics);
+    </script>
+  </body>
+</html>

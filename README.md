@@ -1,41 +1,65 @@
-# bot
-bot de discord
-#_______________________________________________________________________INICIO DEL BOT
-import os
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
-import urllib.request
-import json
-DISCORD_TOKEN = '#aca va el token'
-#esto es del servidor del discord con el token
+# Asistente IA MVP (Fase 5)
 
-#_______________________________________________________________________PREFIJO
-bot = commands.Bot(command_prefix='!')
-#_______________________________________________________________________
+El proyecto ahora incluye la **Fase 5**: integración de voz básica (mock) sobre el flujo del asistente, con endpoint dedicado y contrato para modulación futura MMVC/RVC.
 
-  
+## Qué incluye actualmente
+- Base web:
+  - `app.py` (`/`, `/health`, `/chat`, `/voice/chat`, `/metrics`)
+  - `templates/index.html`
+- Persistencia:
+  - `db.py`
+  - `db/schema.sql`
+- Herramientas funcionales:
+  - `crear_cliente`, `listar_clientes`, `registrar_historial`, `ver_historial`
+- IA (reglas):
+  - `intents.py`
+  - `orchestrator.py`
+- Voz Fase 5:
+  - `voice_pipeline.py` (MockSTT/MockTTS/MockVoiceModulator)
+  - `scripts/demo_fase5.sh`
+  - `docs/OPERACION_FASE5.md`
+- Evaluación y operación previa:
+  - `data/prompts_eval.jsonl`
+  - `scripts/evaluar_fase3.py`
+  - `scripts/init_db.py`
+  - `docs/OPERACION_FASE4.md`
+- Tests:
+  - `tests/test_tools.py`
+  - `tests/test_orchestrator.py`
+  - `tests/test_phase3_api.py`
+  - `tests/test_phase5_api.py`
+  - `tests/test_voice_pipeline.py`
+  - `tests/test_smoke.py`
 
-#es del bot de dados
-#__________________________________________________________________________
+## Requisitos
+- Python 3.10+
 
-#______________________________________________________________________IMPORTAR RANDON
+## Instalación rápida
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-import random
-for i in range (1):
-#______________________________________________________________________
+## Runbook rápido (fase 5)
+```bash
+python3 scripts/init_db.py
+./run.sh
+# en otra terminal:
+./scripts/demo_fase5.sh
+```
 
-#_____________________________________________________________________IMAGENES
-    imagen1 = 'https://media.discordapp.net/attachments/807091135608258560/900836975999848498/exito.png'
-    imagen2 = 'https://cdn.discordapp.com/attachments/807091135608258560/900836977295917126/fracaso.png'
+## Probar endpoint de voz
+```bash
+curl -s -X POST http://localhost:5000/voice/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"message":"crear cliente Ana","tts_style":"energetic","enable_modulation":true,"voice_character":"hero"}'
+```
 
-#__________________________________________________________________________EXP DE BOT DISCORD
-    @bot.command(name='dadoexito')
-    async def tirar(ctx):
-     operador1 = random.choice([imagen1 ,imagen2])
-     await ctx.send('la tirada salio')
-     await ctx.send(operador1)
-        
+## Ejecutar pruebas
+```bash
+pytest -q
+```
 
-#__________________________________________________________________________ENCENDIDO
-bot.run(DISCORD_TOKEN) 
+## Próximo paso
+Fase 5.1: reemplazar mocks de TTS/modulación por integración real con proveedor TTS y MMVC/RVC.
