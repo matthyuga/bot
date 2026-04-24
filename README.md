@@ -1,19 +1,25 @@
-# Asistente IA MVP (Fase 0)
+# Asistente IA MVP (Fase 1)
 
-Este repositorio quedó preparado con la **estructura base de arranque** para el proyecto del asistente IA.
+Este repositorio contiene la base del asistente IA y ahora incluye la **Fase 1 completa**: persistencia SQLite + tools funcionales con validación.
 
-## Qué incluye Fase 0
-- Estructura inicial de módulos:
-  - `app.py`
-  - `db.py`
-  - `tools.py`
+## Qué incluye actualmente
+- Base web mínima:
+  - `app.py` (`/` y `/health`)
+  - `templates/index.html`
+- Persistencia:
+  - `db.py` (conexión, inicialización y helpers)
+  - `db/schema.sql` (tablas `clientes`, `historial`, `eventos_chat`)
+- Herramientas de dominio:
+  - `crear_cliente`
+  - `listar_clientes`
+  - `registrar_historial`
+  - `ver_historial`
+- Módulos de IA inicial:
   - `intents.py`
   - `orchestrator.py`
-  - `templates/index.html`
-  - `tests/test_smoke.py`
-- Dependencias mínimas en `requirements.txt`.
-- Script de arranque `run.sh`.
-- Normas de trabajo en `NORMAS_EQUIPO.md`.
+- Tests:
+  - `tests/test_tools.py`
+  - `tests/test_smoke.py` (se omite si Flask no está disponible)
 
 ## Requisitos
 - Python 3.10+
@@ -25,7 +31,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Ejecutar
+## Ejecutar app
 ```bash
 ./run.sh
 ```
@@ -40,4 +46,4 @@ pytest -q
 ```
 
 ## Próximo paso
-Implementar Fase 1: esquema SQL + tools reales con validación y persistencia.
+Fase 2: intención + orquestador conectados a tools para endpoint de chat (`/chat`).
